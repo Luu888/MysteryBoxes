@@ -5,6 +5,10 @@ using MysteryBoxes.Models;
 using MysteryBoxes.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Mystery Boxes zawsze działa lokalnie przez HTTP na porcie 57286.
+// Ten sam adres jest używany przez Twitch OAuth RedirectUri.
+builder.WebHost.UseUrls("http://localhost:57286");
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();

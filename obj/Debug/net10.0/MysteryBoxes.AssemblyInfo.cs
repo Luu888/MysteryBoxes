@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("485d9cc4-ba6a-43be-8ef9-6c63e88eeb52")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("MysteryBoxes")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+235347075012aa86fdeb72b22a2f7c964242332e")]
 [assembly: System.Reflection.AssemblyProductAttribute("MysteryBoxes")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MysteryBoxes")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -21,3 +21,12 @@
 @keyframes prizeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes spinFlash{to{transform:rotate(360deg);opacity:.55}}
 @media(max-width:600px){.reveal-card{min-height:340px;padding:22px 16px}}
+
+/* Subtelne logo tylko na zakrytych polach */
+.box:not(.opened){position:relative;isolation:isolate;overflow:hidden}
+.box:not(.opened)::before{content:"";position:absolute;inset:0;z-index:-1;background:url('/images/tile-mark.png') center/contain no-repeat;opacity:.16;filter:saturate(.85)}
+.box:not(.opened) .number{position:relative;z-index:1;color:#fff;text-shadow:0 2px 6px #000,0 0 10px #000}
+.overlay-link-box{margin-top:18px;padding:14px;background:#071a13;border:1px solid #287653;border-radius:9px}
+.overlay-link-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.overlay-link-row input{flex:1;min-width:220px;max-width:none;margin:0}
+.overlay-link-row button{white-space:nowrap}

@@ -7,7 +7,7 @@
 <label>SubLuck – mnożnik zgłoszenia subskrybenta <input id="subLuck" type="number" min="1" max="100" value="1"></label>
 <p class="hint">1 = standardowa szansa, 2 = dwa losy, 3 = trzy losy itd. Osoby bez suba zawsze mają mnożnik 1.</p>
 <button onclick="saveSubLuck()">Zapisz SubLuck</button>
-<p>Adres widżetu OBS: <code id="overlayUrl"></code></p></section>
+<div class="overlay-link-box"><strong>Widżet OBS</strong><p class="hint">Ten adres dodaj w OBS jako źródło „Przeglądarka”. Możesz też otworzyć podgląd w nowej karcie.</p><div class="overlay-link-row"><input id="overlayUrl" readonly aria-label="Link do overlay OBS"><button onclick="copyOverlayUrl()">Kopiuj link</button><button class="secondary" onclick="openOverlay()">Otwórz overlay ↗</button></div></div></section>
 <section class="panel"><h2>Animacja i dźwięk nagrody</h2>
 <p class="hint">Po wybraniu paczki widżet pokaże animację otwierania i prezentacji nagrody. Dźwięk będzie odtwarzany w źródle przeglądarki OBS.</p>
 <label>Własny dźwięk (MP3, WAV lub OGG, maks. 10 MB)<input id="soundFile" type="file" accept="audio/mpeg,audio/wav,audio/ogg,.mp3,.wav,.ogg"></label>

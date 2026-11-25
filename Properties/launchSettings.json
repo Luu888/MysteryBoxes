@@ -3,10 +3,10 @@
     "MysteryBoxes": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "http://localhost:57286",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:57286;http://localhost:57287"
+      }
     }
   }
 }

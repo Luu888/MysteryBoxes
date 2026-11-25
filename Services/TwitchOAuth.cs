@@ -28,17 +28,29 @@ public static class TwitchOAuth
         if (string.IsNullOrEmpty(code) || !ctx.Request.Cookies.TryGetValue("twitch_oauth_state", out var saved) || saved != state)
             return Results.BadRequest("Nieprawidłowy OAuth state.");
         var http = clients.CreateClient();
-        var tokenResp = await http.PostAsJsonAsync("https://id.twitch.tv/oauth2/token", new
+        using var tokenRequest = new FormUrlEncodedContent(new Dictionary<string, string>
         {
-            client_id = opt.Value.ClientId, client_secret = opt.Value.ClientSecret, code,
-            grant_type = "authorization_code", redirect_uri = opt.Value.RedirectUri
+            ["client_id"] = opt.Value.ClientId,
+            ["client_secret"] = opt.Value.ClientSecret,
+            ["code"] = code,
+            ["grant_type"] = "authorization_code",
+            ["redirect_uri"] = opt.Value.RedirectUri
         });
+        using var tokenResp = await http.PostAsync("https://id.twitch.tv/oauth2/token", tokenRequest);
         if (!tokenResp.IsSuccessStatusCode) return Results.Problem("Twitch OAuth token exchange failed: " + await tokenResp.Content.ReadAsStringAsync());
         var token = await tokenResp.Content.ReadFromJsonAsync<TokenResponse>();
         if (token?.access_token is null) return Results.Problem("Brak tokenu Twitch.");
         http.DefaultRequestHeaders.Add("Client-Id", opt.Value.ClientId);
         http.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
-        var users = await http.GetFromJsonAsync<UserResponse>("https://api.twitch.tv/helix/users");
+        UserResponse? users;
+        try
+        {
+            users = await http.GetFromJsonAsync<UserResponse>("https://api.twitch.tv/helix/users");
+        }
+        catch (HttpRequestException ex)
+        {
+            return Results.Problem("Twitch przyjął token, ale pobranie profilu nie powiodło się: " + ex.Message);
+        }
         var u = users?.data?.FirstOrDefault();
         if (u?.id is null) return Results.Problem("Nie udało się pobrać konta Twitch.");
         await store.SaveAsync(new TwitchAuth { AccessToken = token.access_token, RefreshToken = token.refresh_token ?? "", BroadcasterId = u.id, DisplayName = u.display_name ?? u.login ?? "Twitch", ExpiresAt = DateTime.UtcNow.AddSeconds(token.expires_in) });

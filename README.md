@@ -8,7 +8,7 @@
    - Ustaw `Twitch:ClientId` i `Twitch:ClientSecret`.
    - Scope autoryzacji: `user:read:chat user:write:chat`.
 4. `dotnet restore`
-5. `dotnet run --urls http://localhost:5080`
+5. `dotnet run --urls http://localhost:57286`
 6. Panel: `/Admin` (przekieruje do `/Admin/Login`).
 7. Widżet OBS: `/`.
 
@@ -53,3 +53,6 @@ Status subskrybenta jest odczytywany z badge'ów wiadomości Twitch EventSub (`s
 
 ## Animacja odkrycia nagrody
 Po odkryciu paczki widżet wyświetla pełnoekranową animację: potrząsanie skrzynką, błysk, wejście karty nagrody i delikatne unoszenie grafiki. W panelu administratora w sekcji „Animacja i dźwięk nagrody” można wgrać własny plik MP3, WAV lub OGG (do 10 MB), odsłuchać go, albo przywrócić domyślny dźwięk. Odtwarzanie odbywa się w źródle przeglądarki OBS. Jeśli domyślny plik dźwiękowy nie istnieje, aplikacja odtwarza krótki sygnał generowany przez przeglądarkę.
+
+## Panel administratora i adres OBS
+Strona główna (`/`) przekierowuje do panelu (`/Admin`); niezalogowany użytkownik trafia do logowania. Overlay jest dostępny pod `/Overlay`. Panel zawiera przyciski otwierania overlay w nowej karcie i kopiowania pełnego adresu do OBS. Przekazana grafika jest subtelnym, półprzezroczystym znakiem wodnym wyłącznie na zakrytych polach; numer pozostaje na wierzchu.

@@ -1,8 +1,9 @@
-wwwroot\css\site.css
-wwwroot\images\gift.svg
 wwwroot\js\admin.js
+wwwroot\images\gift.svg
+wwwroot\css\site.css
 wwwroot\js\overlay.js
-C:\Users\Tomasz\Downloads\MysteryBoxes-Full-SubLuck-Animation\MysteryBoxes-Full\wwwroot\css\site.css
-C:\Users\Tomasz\Downloads\MysteryBoxes-Full-SubLuck-Animation\MysteryBoxes-Full\wwwroot\images\gift.svg
-C:\Users\Tomasz\Downloads\MysteryBoxes-Full-SubLuck-Animation\MysteryBoxes-Full\wwwroot\js\admin.js
-C:\Users\Tomasz\Downloads\MysteryBoxes-Full-SubLuck-Animation\MysteryBoxes-Full\wwwroot\js\overlay.js
+wwwroot\images\tile-mark.png
+C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\js\admin.js
+C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\css\site.css
+C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\js\overlay.js
+C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\images\gift.svg
