@@ -2,13 +2,13 @@
 @model MysteryBoxes.Pages.AdminModel
 @{ Layout = null; }
 <!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mystery Boxes – Admin</title><link rel="stylesheet" href="/css/site.css"></head>
-<body><main class="admin"><h1>Mystery Boxes – panel administratora</h1>
+<body><div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div><main class="admin"><h1>Mystery Boxes – panel administratora</h1>
 <section class="panel"><h2>Połączenie Twitch</h2><div id="twitchStatus" class="status-pending"><span class="status-dot"></span>Sprawdzanie połączenia...</div><div class="actions"><a id="connectTwitchButton" class="button" href="/twitch/connect">Połącz konto Twitch</a><button id="disconnectTwitchButton" class="secondary" onclick="disconnectTwitch()" disabled>Rozłącz</button></div><p class="hint">Wymagane scope: user:read:chat oraz user:write:chat. Ustaw Client ID, Client Secret i Redirect URI w appsettings.json.</p></section>
 <section class="panel"><h2>Wygląd widżetu</h2><label>Tytuł <input id="titleInput" value="MYSTERY BOXES"></label><div class="colors"><label>Tło <input id="bg" type="color" value="#071a13"></label><label>Pola <input id="box" type="color" value="#164632"></label><label>Akcent <input id="accent" type="color" value="#54ffae"></label><label>Kolumny <select id="columns"><option>4</option><option>5</option><option selected>6</option><option>7</option><option>8</option></select></label></div><button onclick="saveSettings()">Zapisz wygląd</button>
 <label>SubLuck – mnożnik zgłoszenia subskrybenta <input id="subLuck" type="number" min="1" max="100" value="1"></label>
 <p class="hint">1 = standardowa szansa, 2 = dwa losy, 3 = trzy losy itd. Osoby bez suba zawsze mają mnożnik 1.</p>
 <button onclick="saveSubLuck()">Zapisz SubLuck</button>
-<div class="overlay-link-box"><strong>Widżet OBS</strong><p class="hint">Ten adres dodaj w OBS jako źródło „Przeglądarka”. Możesz też otworzyć podgląd w nowej karcie.</p><div class="overlay-link-row"><input id="overlayUrl" readonly aria-label="Link do overlay OBS"><button onclick="copyOverlayUrl()">Kopiuj link</button><button class="secondary" onclick="openOverlay()">Otwórz overlay ↗</button></div></div></section>
+<div class="overlay-link-box"><strong>Widżet OBS</strong><p class="hint">Ten adres dodaj w OBS jako źródło „Przeglądarka”. Możesz też otworzyć podgląd w nowej karcie.</p><div class="overlay-link-row"><input id="overlayUrl" type="url" readonly aria-readonly="true" tabindex="-1" aria-label="Link do overlay OBS"><button onclick="copyOverlayUrl()">Kopiuj link</button><button class="secondary" onclick="openOverlay()">Otwórz overlay ↗</button></div></div></section>
 <section class="panel"><h2>Animacja i dźwięk nagrody</h2>
 <p class="hint">Po wybraniu paczki widżet pokaże animację otwierania i prezentacji nagrody. Dźwięk będzie odtwarzany w źródle przeglądarki OBS.</p>
 <label>Własny dźwięk (MP3, WAV lub OGG, maks. 10 MB)<input id="soundFile" type="file" accept="audio/mpeg,audio/wav,audio/ogg,.mp3,.wav,.ogg"></label>

@@ -63,3 +63,7 @@ Panel `/Admin` jest chroniony logowaniem hasłem z `Admin:Password` w `appsettin
 Przy pierwszym wejściu aplikacja przekieruje na `/Login`. Po zalogowaniu przeglądarka
 otrzyma cookie `MysteryBoxes.Admin`, a panel i endpointy `/api/admin/*` będą dostępne.
 Po zalogowaniu połącz konto Twitch przyciskiem w panelu.
+
+
+## v5 – wygląd i komunikaty
+Przycisk „Zapisz wygląd” zapisuje teraz również tytuł widżetu. Link OBS jest tylko do odczytu. Panel pokazuje wyskakujące powiadomienia sukcesu i błędów po operacjach.
