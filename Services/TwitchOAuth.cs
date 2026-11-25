@@ -24,23 +24,64 @@ public static class TwitchOAuth
     }
     public static async Task<IResult> Callback(HttpContext ctx, IHttpClientFactory clients, IOptions<TwitchOptions> opt, TwitchTokenService store)
     {
-        var code = ctx.Request.Query["code"].ToString(); var state = ctx.Request.Query["state"].ToString();
+        var code = ctx.Request.Query["code"].ToString();
+        var state = ctx.Request.Query["state"].ToString();
+        var oauthError = ctx.Request.Query["error"].ToString();
+        var oauthErrorDescription = ctx.Request.Query["error_description"].ToString();
+        if (!string.IsNullOrWhiteSpace(oauthError))
+            return Results.BadRequest($"Twitch OAuth: {oauthError} – {oauthErrorDescription}");
         if (string.IsNullOrEmpty(code) || !ctx.Request.Cookies.TryGetValue("twitch_oauth_state", out var saved) || saved != state)
-            return Results.BadRequest("Nieprawidłowy OAuth state.");
+            return Results.BadRequest("Nieprawidłowy OAuth state. Rozpocznij łączenie ponownie z panelu administratora.");
+        var twitch = opt.Value;
+        if (string.IsNullOrWhiteSpace(twitch.ClientId))
+            return Results.Problem("Brak Twitch:ClientId. Aplikacja nie wczytała wartości z appsettings.json.");
+        if (string.IsNullOrWhiteSpace(twitch.ClientSecret))
+            return Results.Problem("Brak Twitch:ClientSecret. Uzupełnij nowy sekret w appsettings.json.");
+
+        // Wczytujemy i walidujemy dokładnie te wartości, które trafią do żądania tokenowego.
+        var clientId = twitch.ClientId.Trim();
+        var clientSecret = twitch.ClientSecret.Trim();
+        var redirectUri = twitch.RedirectUri.Trim();
+
+        if (string.IsNullOrWhiteSpace(clientId))
+            return Results.Problem("Brak Twitch:ClientId w konfiguracji aplikacji.");
+        if (string.IsNullOrWhiteSpace(clientSecret))
+            return Results.Problem("Brak Twitch:ClientSecret w konfiguracji aplikacji.");
+        if (string.IsNullOrWhiteSpace(redirectUri))
+            return Results.Problem("Brak Twitch:RedirectUri w konfiguracji aplikacji.");
+
         var http = clients.CreateClient();
-        using var tokenRequest = new FormUrlEncodedContent(new Dictionary<string, string>
+        using var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://id.twitch.tv/oauth2/token")
         {
-            ["client_id"] = opt.Value.ClientId,
-            ["client_secret"] = opt.Value.ClientSecret,
-            ["code"] = code,
-            ["grant_type"] = "authorization_code",
-            ["redirect_uri"] = opt.Value.RedirectUri
-        });
-        using var tokenResp = await http.PostAsync("https://id.twitch.tv/oauth2/token", tokenRequest);
-        if (!tokenResp.IsSuccessStatusCode) return Results.Problem("Twitch OAuth token exchange failed: " + await tokenResp.Content.ReadAsStringAsync());
+            Content = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                ["client_id"] = clientId,
+                ["client_secret"] = clientSecret,
+                ["code"] = code,
+                ["grant_type"] = "authorization_code",
+                ["redirect_uri"] = redirectUri
+            })
+        };
+
+        // client_id jest także w query string jako dodatkowa kompatybilność;
+        // wymagane parametry pozostają również w body x-www-form-urlencoded.
+        tokenRequest.RequestUri = new Uri(QueryHelpers.AddQueryString(
+            "https://id.twitch.tv/oauth2/token",
+            "client_id",
+            clientId));
+
+        Console.WriteLine($"[Twitch OAuth] Token exchange: client_id present=true; length={clientId.Length}; redirect_uri={redirectUri}; content_type={tokenRequest.Content!.Headers.ContentType}; body_length={(await tokenRequest.Content.ReadAsByteArrayAsync()).Length}");
+
+        using var tokenResp = await http.SendAsync(tokenRequest);
+        if (!tokenResp.IsSuccessStatusCode)
+        {
+            var errorBody = await tokenResp.Content.ReadAsStringAsync();
+            Console.WriteLine($"[Twitch OAuth] Token exchange failed: HTTP {(int)tokenResp.StatusCode}; response={errorBody}");
+            return Results.Problem("Twitch OAuth token exchange failed: " + errorBody);
+        }
         var token = await tokenResp.Content.ReadFromJsonAsync<TokenResponse>();
         if (token?.access_token is null) return Results.Problem("Brak tokenu Twitch.");
-        http.DefaultRequestHeaders.Add("Client-Id", opt.Value.ClientId);
+        http.DefaultRequestHeaders.Add("Client-Id", clientId);
         http.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
         UserResponse? users;
         try

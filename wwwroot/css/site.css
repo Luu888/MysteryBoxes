@@ -30,3 +30,12 @@
 .overlay-link-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .overlay-link-row input{flex:1;min-width:220px;max-width:none;margin:0}
 .overlay-link-row button{white-space:nowrap}
+
+/* Twitch connection indicator */
+#twitchStatus{padding:12px 14px;border-radius:8px;margin:12px 0;line-height:1.65}
+.status-pending{background:#273449;color:#e5e7eb}
+.status-connected{background:#123d2b;color:#b9f6d0;border:1px solid #27945b}
+.status-disconnected{background:#3b2a12;color:#ffe0a3;border:1px solid #9a6b20}
+.status-error{background:#421d24;color:#ffd0d5;border:1px solid #a33b4b}
+.status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:currentColor;margin-right:9px;box-shadow:0 0 8px currentColor}
+#disconnectTwitchButton:disabled{opacity:.45;cursor:not-allowed}

@@ -9,13 +9,30 @@ var builder = WebApplication.CreateBuilder(args);
 // Mystery Boxes zawsze działa lokalnie przez HTTP na porcie 57286.
 // Ten sam adres jest używany przez Twitch OAuth RedirectUri.
 builder.WebHost.UseUrls("http://localhost:57286");
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    // Zabezpieczamy cały panel administracyjny konwencją Razor Pages.
+    // Logowanie pozostaje publiczne, aby można było uzyskać cookie administratora.
+    options.Conventions.AuthorizePage("/Admin");
+    options.Conventions.AllowAnonymousToPage("/Login");
+});
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(o =>
     {
-        o.LoginPath = "/Admin/Login";
+        o.LoginPath = "/Login";
+        o.AccessDeniedPath = "/Login";
+        o.Events.OnRedirectToLogin = context =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
         o.Cookie.Name = "MysteryBoxes.Admin";
         o.Cookie.HttpOnly = true;
         o.Cookie.SameSite = SameSiteMode.Strict;

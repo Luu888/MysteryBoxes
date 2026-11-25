@@ -1,9 +1,11 @@
+wwwroot\js\overlay.js
 wwwroot\js\admin.js
+wwwroot\images\tile-mark.png
 wwwroot\images\gift.svg
 wwwroot\css\site.css
-wwwroot\js\overlay.js
-wwwroot\images\tile-mark.png
-C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\js\admin.js
+wwwroot\uploads\sounds\a18e64ff3d1e40a28b64578163ee714a.mp3
+wwwroot\uploads\4b9606d9a92b4accb4bacae6daf9e9a8.png
 C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\css\site.css
-C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\js\overlay.js
 C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\images\gift.svg
+C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\js\admin.js
+C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\js\overlay.js

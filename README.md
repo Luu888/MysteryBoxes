@@ -56,3 +56,10 @@ Po odkryciu paczki widżet wyświetla pełnoekranową animację: potrząsanie sk
 
 ## Panel administratora i adres OBS
 Strona główna (`/`) przekierowuje do panelu (`/Admin`); niezalogowany użytkownik trafia do logowania. Overlay jest dostępny pod `/Overlay`. Panel zawiera przyciski otwierania overlay w nowej karcie i kopiowania pełnego adresu do OBS. Przekazana grafika jest subtelnym, półprzezroczystym znakiem wodnym wyłącznie na zakrytych polach; numer pozostaje na wierzchu.
+
+
+## Logowanie administratora
+Panel `/Admin` jest chroniony logowaniem hasłem z `Admin:Password` w `appsettings.json`.
+Przy pierwszym wejściu aplikacja przekieruje na `/Login`. Po zalogowaniu przeglądarka
+otrzyma cookie `MysteryBoxes.Admin`, a panel i endpointy `/api/admin/*` będą dostępne.
+Po zalogowaniu połącz konto Twitch przyciskiem w panelu.
