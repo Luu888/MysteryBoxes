@@ -1,0 +1,8 @@
+wwwroot\css\site.css
+wwwroot\images\gift.svg
+wwwroot\js\admin.js
+wwwroot\js\overlay.js
+C:\Users\Tomasz\Downloads\MysteryBoxes-Full-SubLuck-Animation\MysteryBoxes-Full\wwwroot\css\site.css
+C:\Users\Tomasz\Downloads\MysteryBoxes-Full-SubLuck-Animation\MysteryBoxes-Full\wwwroot\images\gift.svg
+C:\Users\Tomasz\Downloads\MysteryBoxes-Full-SubLuck-Animation\MysteryBoxes-Full\wwwroot\js\admin.js
+C:\Users\Tomasz\Downloads\MysteryBoxes-Full-SubLuck-Animation\MysteryBoxes-Full\wwwroot\js\overlay.js
