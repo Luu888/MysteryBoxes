@@ -44,12 +44,18 @@ function renderBoard(v){
 async function loadBoard(){renderBoard(await readJson('/api/state'))}
 async function load(){
  const v=await readJson('/api/state');adminState=v;
- $('titleInput').value=v.title;$('bg').value=v.background;$('box').value=v.boxColor;$('accent').value=v.accent;$('columns').value=v.columns;
+ $('titleInput').value=v.title;$('bg').value=v.background;$('box').value=v.boxColor;$('accent').value=v.accent;$('columns').value=v.columns<=4?4:v.columns>=7?8:6;
+ sponsors=v.sponsors;$('sponsorText').value=v.sponsorText;renderSponsors();
  $('soundPreview').src=v.animationSoundUrl||'/sounds/reveal.mp3';$('soundStatus').textContent='Aktualny dźwięk: '+(v.animationSoundUrl||'/sounds/reveal.mp3');
  $('overlayUrl').value=location.origin+'/Overlay';
  renderPrizes(v.prizes);renderBoard(v);
 }
 load().catch(e=>$('result').textContent=e.message);setInterval(()=>loadBoard().catch(()=>{}),3000);
+let sponsors=[];
+function renderSponsors(){const el=$('sponsorList');el.innerHTML='';sponsors.forEach((url,i)=>{const item=document.createElement('div');const img=document.createElement('img');img.src=url;img.alt='';const b=document.createElement('button');b.type='button';b.className='secondary';b.textContent='Usuń';b.onclick=()=>removeSponsor(i);item.append(img,b);el.append(item)})}
+async function storeSponsors(images){const d=await api('/api/admin/sponsors',{images,text:$('sponsorText').value});sponsors=images;renderSponsors();toast(d.message)}
+async function saveSponsors(){try{const images=[...sponsors];for(const file of $('sponsorFiles').files)images.push(await upload(file));await storeSponsors(images);$('sponsorFiles').value=''}catch(e){toast(e.message,'error')}}
+async function removeSponsor(index){try{await storeSponsors(sponsors.filter((_,i)=>i!==index))}catch(e){toast(e.message,'error')}}
 async function uploadAnimationSound(){try{const file=$('soundFile').files[0];if(!file)throw new Error('Wybierz plik dźwiękowy.');const f=new FormData();f.append('file',file);const r=await fetch('/api/admin/upload-sound',{method:'POST',body:f});const raw=await r.text();let d={};if(raw){try{d=JSON.parse(raw)}catch{d={message:raw}}}if(!r.ok)throw new Error(d.detail||d.message||d.title||`Błąd HTTP ${r.status}`);if(!d.url)throw new Error('Serwer nie zwrócił adresu pliku.');await api('/api/admin/animation-sound',{soundUrl:d.url});$('soundPreview').src=d.url;$('soundStatus').textContent='Aktualny dźwięk: '+file.name;$('result').textContent='Zapisano dźwięk animacji.';toast('Zapisano dźwięk animacji.');await load()}catch(e){$('result').textContent=e.message;toast(e.message,'error')}}
 async function resetAnimationSound(){try{await api('/api/admin/animation-sound',{soundUrl:'/sounds/reveal.mp3'});$('soundPreview').src='/sounds/reveal.mp3';$('soundStatus').textContent='Aktualny dźwięk: domyślny';$('result').textContent='Przywrócono domyślny dźwięk.';toast('Przywrócono domyślny dźwięk.');await load()}catch(e){$('result').textContent=e.message;toast(e.message,'error')}}
 function previewAnimationSound(){const a=$('soundPreview');if(!a.src)a.src=adminState?.animationSoundUrl||'/sounds/reveal.mp3';a.play().catch(()=>{$('result').textContent='Nie udało się odtworzyć dźwięku.'})}

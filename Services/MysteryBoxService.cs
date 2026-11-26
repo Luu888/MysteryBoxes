@@ -15,6 +15,8 @@ public class MysteryBoxService(IDbContextFactory<AppDbContext> factory, IHubCont
             title = ev?.Title ?? "MYSTERY BOXES", background = ev?.Background ?? "#071a13",
             boxColor = ev?.BoxColor ?? "#164632", accent = ev?.Accent ?? "#54ffae", columns = ev?.Columns ?? 6,
             animationSoundUrl = ev?.AnimationSoundUrl ?? "/sounds/reveal.mp3",
+            sponsors = (ev?.SponsorImages ?? "").Split('\n', StringSplitOptions.RemoveEmptyEntries),
+            sponsorText = ev?.SponsorText ?? "",
             prizes = await db.Prizes.OrderBy(x => x.Number).Select(x => new { x.Number, x.Name, x.ImageUrl, x.IsOpened }).ToListAsync()
         };
     }
@@ -76,6 +78,15 @@ public class MysteryBoxService(IDbContextFactory<AppDbContext> factory, IHubCont
         await Notify();
         return new { ok = true, message = "Zapisano dźwięk animacji." };
     }
+    public async Task<object> SetSponsorsAsync(SponsorsInput input)
+    {
+        await using var db = await factory.CreateDbContextAsync();
+        var ev = await EnsureEvent(db);
+        // Przyjmujemy tylko pliki wgrane przez panel.
+        ev.SponsorImages = string.Join('\n', (input.Images ?? []).Where(x => x.StartsWith("/uploads/") && !x.Contains('\n')));
+        ev.SponsorText = input.Text?.Trim() ?? "";
+        await db.SaveChangesAsync(); await Notify(); return new { ok = true, message = "Zapisano sponsorów." };
+    }
     private static string ValidColor(string? value, string fallback) =>
         !string.IsNullOrWhiteSpace(value) && System.Text.RegularExpressions.Regex.IsMatch(value, "^#[0-9a-fA-F]{6}$") ? value : fallback;
     private static async Task<DrawEvent> EnsureEvent(AppDbContext db)
@@ -86,5 +97,6 @@ public class MysteryBoxService(IDbContextFactory<AppDbContext> factory, IHubCont
     }
     private Task Notify() => hub.Clients.All.SendAsync("stateChanged");
 }
+public record SponsorsInput(string[]? Images, string? Text);
 public record PrizeInput(int Number, string Name, string ImageUrl);
 public record ThemeInput(string? Background, string? Box, string? Accent, int? Columns);

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MysteryBoxes.Data;
 using MysteryBoxes.Models;
@@ -8,38 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Mystery Boxes zawsze działa lokalnie przez HTTP na porcie 57286.
 builder.WebHost.UseUrls("http://localhost:57286");
-builder.Services.AddRazorPages(options =>
-{
-    // Zabezpieczamy cały panel administracyjny konwencją Razor Pages.
-    // Logowanie pozostaje publiczne, aby można było uzyskać cookie administratora.
-    options.Conventions.AuthorizePage("/Admin");
-    options.Conventions.AllowAnonymousToPage("/Login");
-});
+builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
-builder.Services.AddHttpClient();
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(o =>
-    {
-        o.LoginPath = "/Login";
-        o.AccessDeniedPath = "/Login";
-        o.Events.OnRedirectToLogin = context =>
-        {
-            if (context.Request.Path.StartsWithSegments("/api"))
-            {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                return Task.CompletedTask;
-            }
-            context.Response.Redirect(context.RedirectUri);
-            return Task.CompletedTask;
-        };
-        o.Cookie.Name = "MysteryBoxes.Admin";
-        o.Cookie.HttpOnly = true;
-        o.Cookie.SameSite = SameSiteMode.Strict;
-        o.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-        o.ExpireTimeSpan = TimeSpan.FromHours(12);
-        o.SlidingExpiration = true;
-    });
-builder.Services.AddAuthorization();
 builder.Services.AddDbContextFactory<AppDbContext>(o =>
     o.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddSingleton<MysteryBoxService>();
@@ -62,6 +31,10 @@ using (var scope = app.Services.CreateScope())
     }
     if (!columns.Contains("AnimationSoundUrl"))
         await db.Database.ExecuteSqlRawAsync("ALTER TABLE Events ADD COLUMN AnimationSoundUrl TEXT NOT NULL DEFAULT '/sounds/reveal.mp3'");
+    if (!columns.Contains("SponsorImages"))
+        await db.Database.ExecuteSqlRawAsync("ALTER TABLE Events ADD COLUMN SponsorImages TEXT NOT NULL DEFAULT ''");
+    if (!columns.Contains("SponsorText"))
+        await db.Database.ExecuteSqlRawAsync("ALTER TABLE Events ADD COLUMN SponsorText TEXT NOT NULL DEFAULT ''");
 
     if (!await db.Events.AnyAsync())
         db.Events.Add(new DrawEvent { Title = "MYSTERY BOXES", IsActive = true });
@@ -73,21 +46,32 @@ using (var scope = app.Services.CreateScope())
     await db.SaveChangesAsync();
 }
 
+// Bez logowania: odrzucamy zapisy wysyłane z innych stron otwartych w przeglądarce na tym komputerze.
+app.Use(async (context, next) =>
+{
+    var origin = context.Request.Headers.Origin.ToString();
+    if (!HttpMethods.IsGet(context.Request.Method) && origin.Length > 0
+        && origin != $"{context.Request.Scheme}://{context.Request.Host}")
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return;
+    }
+    await next();
+});
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapHub<MysteryHub>("/mysteryHub");
 app.MapGet("/api/state", async (MysteryBoxService svc) => Results.Ok(await svc.GetStateAsync()));
 
-app.MapPost("/api/admin/open", async (OpenInput input, MysteryBoxService svc) => Results.Ok(await svc.OpenBoxAsync(input.Number))).RequireAuthorization();
-app.MapPost("/api/admin/reset", async (MysteryBoxService svc) => Results.Ok(await svc.ResetBoxesAsync())).RequireAuthorization();
-app.MapPost("/api/admin/shuffle", async (MysteryBoxService svc) => Results.Ok(await svc.ShufflePrizesAsync())).RequireAuthorization();
-app.MapPost("/api/admin/title", async (TitleInput input, MysteryBoxService svc) => Results.Ok(await svc.SetTitleAsync(input.Title))).RequireAuthorization();
-app.MapPost("/api/admin/settings", async (ThemeInput input, MysteryBoxService svc) => Results.Ok(await svc.SetThemeAsync(input))).RequireAuthorization();
-app.MapPost("/api/admin/animation-sound", async (SoundInput input, MysteryBoxService svc) => Results.Ok(await svc.SetAnimationSoundAsync(input.SoundUrl))).RequireAuthorization();
+app.MapPost("/api/admin/open", async (OpenInput input, MysteryBoxService svc) => Results.Ok(await svc.OpenBoxAsync(input.Number)));
+app.MapPost("/api/admin/reset", async (MysteryBoxService svc) => Results.Ok(await svc.ResetBoxesAsync()));
+app.MapPost("/api/admin/shuffle", async (MysteryBoxService svc) => Results.Ok(await svc.ShufflePrizesAsync()));
+app.MapPost("/api/admin/title", async (TitleInput input, MysteryBoxService svc) => Results.Ok(await svc.SetTitleAsync(input.Title)));
+app.MapPost("/api/admin/settings", async (ThemeInput input, MysteryBoxService svc) => Results.Ok(await svc.SetThemeAsync(input)));
+app.MapPost("/api/admin/animation-sound", async (SoundInput input, MysteryBoxService svc) => Results.Ok(await svc.SetAnimationSoundAsync(input.SoundUrl)));
+app.MapPost("/api/admin/sponsors", async (SponsorsInput input, MysteryBoxService svc) => Results.Ok(await svc.SetSponsorsAsync(input)));
 app.MapPost("/api/admin/upload-sound", async (HttpRequest req, IWebHostEnvironment env) =>
 {
     if (!req.HasFormContentType) return Results.BadRequest("Wymagany multipart/form-data.");
@@ -102,8 +86,8 @@ app.MapPost("/api/admin/upload-sound", async (HttpRequest req, IWebHostEnvironme
     var name = $"{Guid.NewGuid():N}{ext}";
     await using (var stream = File.Create(Path.Combine(folder, name))) await file.CopyToAsync(stream);
     return Results.Ok(new { url = "/uploads/sounds/" + name });
-}).RequireAuthorization();
-app.MapPost("/api/admin/prizes", async (PrizeInput input, MysteryBoxService svc) => Results.Ok(await svc.UpdatePrizeAsync(input))).RequireAuthorization();
+});
+app.MapPost("/api/admin/prizes", async (PrizeInput input, MysteryBoxService svc) => Results.Ok(await svc.UpdatePrizeAsync(input)));
 app.MapPost("/api/admin/upload", async (HttpRequest req, IWebHostEnvironment env, MysteryBoxService svc) =>
 {
     if (!req.HasFormContentType) return Results.BadRequest("Wymagany multipart/form-data.");
@@ -118,7 +102,7 @@ app.MapPost("/api/admin/upload", async (HttpRequest req, IWebHostEnvironment env
     var name = $"{Guid.NewGuid():N}{ext}";
     await using (var stream = File.Create(Path.Combine(folder, name))) await file.CopyToAsync(stream);
     return Results.Ok(new { url = "/uploads/" + name });
-}).RequireAuthorization();
+});
 
 app.Run();
 

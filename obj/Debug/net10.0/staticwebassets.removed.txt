@@ -1,4 +1,0 @@
-C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\css\site.css
-C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\images\gift.svg
-C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\js\admin.js
-C:\Users\Tomasz\source\repos\MysteryBoxes\wwwroot\js\overlay.js

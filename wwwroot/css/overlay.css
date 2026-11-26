@@ -1,0 +1,60 @@
+/* Nakładka OBS: płótno 1920x1080, skalowane w overlay.js do rozmiaru źródła przeglądarki. */
+:root{--bg:#071a13;--box:#164632;--accent:#54ffae}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent}
+body{color:#fff;font-family:"Segoe UI",Arial,sans-serif}
+.stage{position:absolute;width:1920px;height:1080px;transform-origin:0 0}
+/* Tło z przezroczystym otworem na kamerkę (te same wymiary co .camera). */
+.stage-bg{position:absolute;inset:0;background:var(--bg) linear-gradient(145deg,transparent,#ffffff0d 55%,#0003);clip-path:path(evenodd,"M0 0H1920V1080H0Z M600 170H1320V575H600Z")}
+
+.title{position:absolute;left:600px;top:30px;width:720px;height:120px;display:flex;align-items:center;justify-content:center;text-align:center}
+.title h1{margin:0;font-size:56px;line-height:1.05;font-weight:900;letter-spacing:2px;text-shadow:0 0 24px var(--accent);overflow-wrap:anywhere}
+
+.camera{position:absolute;left:600px;top:170px;width:720px;height:405px;outline:4px solid var(--accent);box-shadow:0 0 30px color-mix(in srgb,var(--accent) 55%,transparent)}
+.camera span{display:none}
+/* Podpowiedź i ciemne tło tylko przy podglądzie w zwykłej przeglądarce, nigdy w OBS. */
+.preview{background:#000}
+.preview .camera span{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-size:34px;font-weight:900;color:#ffffff66}
+.preview .camera small{font-size:18px;font-weight:600}
+
+.sponsors{position:absolute;left:600px;top:600px;width:720px;height:450px;display:flex;flex-direction:column;gap:14px;padding:20px 24px;border:2px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:18px;background:#0005}
+.sponsors[hidden]{display:none}
+.sponsors h2{margin:0;text-align:center;font-size:24px;letter-spacing:8px;color:var(--accent)}
+.sponsor-logos{flex:1;min-height:0;display:grid;grid-auto-rows:minmax(0,1fr);gap:18px}
+.sponsor-logos img{width:100%;height:100%;min-height:0;object-fit:contain}
+.sponsors p{margin:0;text-align:center;font-size:28px;font-weight:700;overflow-wrap:anywhere}
+
+.boxes{position:absolute;top:30px;width:540px;height:1020px;display:grid;gap:14px}
+.boxes.left{left:30px}
+.boxes.right{left:1350px}
+.box{position:relative;isolation:isolate;overflow:hidden;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:10px;border:2px solid color-mix(in srgb,var(--accent) 35%,var(--box));border-radius:16px;background:var(--box) repeating-linear-gradient(135deg,#ffffff0b 0 6px,transparent 6px 15px);box-shadow:inset 0 0 28px #0007}
+/* Subtelne logo tylko na zakrytych polach */
+.box:not(.opened)::before{content:"";position:absolute;inset:0;z-index:-1;background:url('/images/tile-mark.png') center/contain no-repeat;opacity:.16;filter:saturate(.85)}
+.box .number{font-size:76px;font-weight:900;text-shadow:0 3px 8px #000,0 0 14px #000}
+.box.opened{border:3px solid var(--accent);background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 38%,var(--box)),var(--box));box-shadow:0 0 26px color-mix(in srgb,var(--accent) 55%,transparent)}
+.box.opened img{width:100%;height:55%;min-height:0;object-fit:contain}
+.box .prize-name{max-width:100%;max-height:40%;overflow:hidden;font-size:24px;line-height:1.15;font-weight:900;text-align:center;overflow-wrap:anywhere;text-shadow:0 2px 6px #000}
+.boxes[data-columns="4"] .number{font-size:60px}
+.boxes[data-columns="4"] .prize-name{font-size:19px}
+
+/* Prezentacja nagrody */
+.reveal{position:absolute;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0;pointer-events:none}
+.reveal.show{visibility:visible;opacity:1}
+.reveal-backdrop{position:absolute;inset:0;background:radial-gradient(circle at center,#0b5638dd 0,#03100def 72%);opacity:0}
+.reveal.show .reveal-backdrop{animation:revealFade .45s ease-out forwards}
+.reveal-card{position:relative;width:960px;min-height:760px;padding:56px 44px;text-align:center;border:4px solid var(--accent);border-radius:36px;background:linear-gradient(145deg,var(--box),#061b12 72%);box-shadow:0 0 60px color-mix(in srgb,var(--accent) 50%,transparent),inset 0 0 55px color-mix(in srgb,var(--accent) 15%,transparent);transform:scale(.25) rotate(-8deg);opacity:0;overflow:hidden}
+.reveal.show .reveal-card{animation:chestReveal .85s cubic-bezier(.16,1.3,.35,1) forwards}
+.reveal-kicker{font-weight:900;letter-spacing:9px;color:var(--accent);font-size:32px}
+.reveal-chest{font-size:160px;line-height:1.2;margin-top:12px;filter:drop-shadow(0 0 30px var(--accent));animation:chestShake .12s linear 5}
+.reveal.show .reveal-chest{animation:chestShake .12s linear 5,chestPop .7s .55s ease-out forwards}
+.reveal-card h2{margin:12px 0;font-size:72px;line-height:1.1;overflow-wrap:anywhere;text-shadow:0 0 26px var(--accent)}
+.reveal-card img{display:block;margin:20px auto;width:300px;height:300px;object-fit:contain;filter:drop-shadow(0 0 26px var(--accent));animation:prizeFloat 2.5s ease-in-out infinite}
+.reveal-card p{margin:0;font-size:30px;font-weight:900;letter-spacing:5px;color:var(--accent)}
+.reveal-flash{position:absolute;inset:-50%;pointer-events:none;background:conic-gradient(from 0deg,transparent,#baffdc66,transparent,#54ffae55,transparent);opacity:0}
+.reveal.show .reveal-flash{animation:spinFlash 2.8s linear infinite}
+@keyframes revealFade{to{opacity:1}}
+@keyframes chestReveal{0%{opacity:0;transform:scale(.25) rotate(-8deg)}65%{opacity:1;transform:scale(1.07) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes chestShake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-8px) rotate(-5deg)}75%{transform:translateX(8px) rotate(5deg)}}
+@keyframes chestPop{to{transform:translateY(-28px) scale(1.2);opacity:0}}
+@keyframes prizeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes spinFlash{to{transform:rotate(360deg);opacity:.55}}

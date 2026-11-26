@@ -194,10 +194,7 @@ C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\rjimswa.dswa.cache.j
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\scopedcss\bundle\MysteryBoxes.styles.css
-C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\57i7bouie0-{0}-eiy1q1e4eh-eiy1q1e4eh.gz
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\rpryhyv7es-{0}-pl288ulizv-pl288ulizv.gz
-C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\g8m1q5sb14-{0}-muzq5okrya-muzq5okrya.gz
-C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\xu7qk4zb8d-{0}-4eykq0xvb4-4eykq0xvb4.gz
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\staticwebassets.development.json
@@ -206,3 +203,8 @@ C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\swae.build.ex.cache
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\MysteryB.F6898583.Up2Date
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\MysteryBoxes.genruntimeconfig.cache
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\ref\MysteryBoxes.dll
+C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\0bbh6d4ydj-{0}-nl86fn8ywe-nl86fn8ywe.gz
+C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\57i7bouie0-{0}-asx7fq1md1-asx7fq1md1.gz
+C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\g8m1q5sb14-{0}-uh0xyfyuit-uh0xyfyuit.gz
+C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\xu7qk4zb8d-{0}-96vscbnw1l-96vscbnw1l.gz
+C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

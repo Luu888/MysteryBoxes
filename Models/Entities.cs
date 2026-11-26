@@ -16,6 +16,8 @@ public class DrawEvent
     public string Accent { get; set; } = "#54ffae";
     public int Columns { get; set; } = 6;
     public string AnimationSoundUrl { get; set; } = "/sounds/reveal.mp3";
+    public string SponsorImages { get; set; } = ""; // adresy logotypów, po jednym w linii
+    public string SponsorText { get; set; } = "";
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsActive { get; set; } = true;
 }
