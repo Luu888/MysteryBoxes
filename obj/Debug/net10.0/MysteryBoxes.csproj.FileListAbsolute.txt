@@ -122,7 +122,6 @@ C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\rjsmrazor.dswa.cache
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\scopedcss\bundle\MysteryBoxes.styles.css
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\rpryhyv7es-{0}-pl288ulizv-pl288ulizv.gz
-C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\xu7qk4zb8d-{0}-qowy25r1de-qowy25r1de.gz
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\staticwebassets.development.json
@@ -135,8 +134,6 @@ C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\refint\MysteryBoxes.
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\MysteryBoxes.pdb
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\MysteryBoxes.genruntimeconfig.cache
 C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\ref\MysteryBoxes.dll
-C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\57i7bouie0-{0}-m8tn9huhg7-m8tn9huhg7.gz
-C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\g8m1q5sb14-{0}-cfrutn9g4j-cfrutn9g4j.gz
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\MysteryBoxes.csproj.AssemblyReference.cache
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\rpswa.dswa.cache.json
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\MysteryBoxes.GeneratedMSBuildEditorConfig.editorconfig
@@ -208,3 +205,7 @@ C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\57i7bouie
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\g8m1q5sb14-{0}-uh0xyfyuit-uh0xyfyuit.gz
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\xu7qk4zb8d-{0}-96vscbnw1l-96vscbnw1l.gz
 C:\Users\Dreman\source\repos\MysteryBoxes\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
+C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\0bbh6d4ydj-{0}-z7ydcljhhp-z7ydcljhhp.gz
+C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\57i7bouie0-{0}-knxsdfhshw-knxsdfhshw.gz
+C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\g8m1q5sb14-{0}-uh0xyfyuit-uh0xyfyuit.gz
+C:\Users\Tomasz\source\repos\MysteryBoxes\obj\Debug\net10.0\compressed\xu7qk4zb8d-{0}-sikxx7y0cn-sikxx7y0cn.gz

@@ -1,105 +1,74 @@
-# =========================
-# Visual Studio
-# =========================
 
+# Visual Studio
 .vs/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
 
-
-# =========================
 # Build results
-# =========================
-
 [Bb]in/
 [Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
 
-# Test results
-[Tt]est[Rr]esults/
-*.trx
+# .NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
-
-# =========================
-# Publish
-# =========================
-
-publish/
-[Pp]ublish/
-
-
-# =========================
-# Rider / JetBrains
-# =========================
-
-.idea/
-*.sln.iml
-
-
-# =========================
-# VS Code
-# =========================
-
-.vscode/
-
-
-# =========================
-# Logs
-# =========================
-
-*.log
-
-
-# =========================
-# OS files
-# =========================
-
-.DS_Store
-Thumbs.db
-
-
-# =========================
-# ASP.NET Core
-# =========================
-
-appsettings.Development.json
-
-# User secrets
-secrets.json
-
-
-# =========================
-# Database
-# =========================
-
-# SQLite database
-*.db
-*.db-shm
-*.db-wal
-
-
-# =========================
-# Generated files
-# =========================
-
-Generated/
-*.cache
-
-
-# =========================
 # NuGet
-# =========================
-
 *.nupkg
 *.snupkg
 .nuget/
 
+# Rider / JetBrains
+.idea/
+*.sln.iml
 
-# =========================
-# Temporary files
-# =========================
+# VS Code
+.vscode/
 
-*.tmp
-*.temp
-*.bak
+# Local configuration / secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# SQLite database and temporary files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+Logs/
+
+# Uploaded files / generated content
+wwwroot/uploads/
+wwwroot/audio/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build configurations
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Dd]ebugPublic/
+[Rr]eleasePublic/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+# Cache
+.cache/
+**/.cache/
