@@ -7,7 +7,6 @@ using MysteryBoxes.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Mystery Boxes zawsze działa lokalnie przez HTTP na porcie 57286.
-// Ten sam adres jest używany przez Twitch OAuth RedirectUri.
 builder.WebHost.UseUrls("http://localhost:57286");
 builder.Services.AddRazorPages(options =>
 {
@@ -41,13 +40,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         o.SlidingExpiration = true;
     });
 builder.Services.AddAuthorization();
-builder.Services.Configure<TwitchOptions>(builder.Configuration.GetSection("Twitch"));
 builder.Services.AddDbContextFactory<AppDbContext>(o =>
     o.UseSqlite(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddSingleton<TwitchChatService>();
 builder.Services.AddSingleton<MysteryBoxService>();
-builder.Services.AddSingleton<TwitchTokenService>();
-builder.Services.AddHostedService<TwitchEventSubService>();
 
 var app = builder.Build();
 
@@ -86,17 +81,12 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapHub<MysteryHub>("/mysteryHub");
 app.MapGet("/api/state", async (MysteryBoxService svc) => Results.Ok(await svc.GetStateAsync()));
-app.MapGet("/api/admin/state", async (MysteryBoxService svc) => Results.Ok(await svc.GetAdminStateAsync())).RequireAuthorization();
 
-app.MapPost("/api/admin/start", async (MysteryBoxService svc) => Results.Ok(await svc.StartSignupsAsync())).RequireAuthorization();
-app.MapPost("/api/admin/close", async (MysteryBoxService svc) => Results.Ok(await svc.CloseSignupsAsync())).RequireAuthorization();
-app.MapPost("/api/admin/draw", async (MysteryBoxService svc) => Results.Ok(await svc.DrawWinnerAsync())).RequireAuthorization();
-app.MapPost("/api/admin/cancel-round", async (MysteryBoxService svc) => Results.Ok(await svc.CancelRoundAsync())).RequireAuthorization();
-app.MapPost("/api/admin/new-event", async (MysteryBoxService svc) => Results.Ok(await svc.NewEventAsync())).RequireAuthorization();
+app.MapPost("/api/admin/open", async (OpenInput input, MysteryBoxService svc) => Results.Ok(await svc.OpenBoxAsync(input.Number))).RequireAuthorization();
+app.MapPost("/api/admin/reset", async (MysteryBoxService svc) => Results.Ok(await svc.ResetBoxesAsync())).RequireAuthorization();
 app.MapPost("/api/admin/shuffle", async (MysteryBoxService svc) => Results.Ok(await svc.ShufflePrizesAsync())).RequireAuthorization();
 app.MapPost("/api/admin/title", async (TitleInput input, MysteryBoxService svc) => Results.Ok(await svc.SetTitleAsync(input.Title))).RequireAuthorization();
 app.MapPost("/api/admin/settings", async (ThemeInput input, MysteryBoxService svc) => Results.Ok(await svc.SetThemeAsync(input))).RequireAuthorization();
-app.MapPost("/api/admin/subluck", async (SubLuckInput input, MysteryBoxService svc) => Results.Ok(await svc.SetSubLuckAsync(input.Multiplier))).RequireAuthorization();
 app.MapPost("/api/admin/animation-sound", async (SoundInput input, MysteryBoxService svc) => Results.Ok(await svc.SetAnimationSoundAsync(input.SoundUrl))).RequireAuthorization();
 app.MapPost("/api/admin/upload-sound", async (HttpRequest req, IWebHostEnvironment env) =>
 {
@@ -130,24 +120,8 @@ app.MapPost("/api/admin/upload", async (HttpRequest req, IWebHostEnvironment env
     return Results.Ok(new { url = "/uploads/" + name });
 }).RequireAuthorization();
 
-app.MapGet("/twitch/connect", TwitchOAuth.Connect);
-app.MapGet("/twitch/callback", TwitchOAuth.Callback);
-app.MapPost("/api/admin/twitch/disconnect", async (TwitchTokenService tokens) => { await tokens.DeleteAsync(); return Results.Ok(new { ok = true }); }).RequireAuthorization();
-app.MapGet("/api/admin/twitch/status", async (TwitchTokenService tokens) =>
-{
-    var a = await tokens.GetAsync();
-    return Results.Ok(new { connected = a is not null, name = a?.DisplayName, expiresAt = a?.ExpiresAt });
-}).RequireAuthorization();
-
-app.MapPost("/api/chat/join", async (JoinInput input, MysteryBoxService svc) =>
-    Results.Ok(new { joined = await svc.JoinAsync(input.TwitchUserId, input.UserName) }));
-app.MapPost("/api/chat/choose", async (ChooseInput input, MysteryBoxService svc) =>
-    Results.Ok(await svc.ChooseBoxAsync(input.Number, input.TwitchUserId, input.UserName)));
-
 app.Run();
 
 record TitleInput(string Title);
-record SubLuckInput(int Multiplier);
 record SoundInput(string? SoundUrl);
-record JoinInput(string TwitchUserId, string UserName);
-record ChooseInput(int Number, string TwitchUserId, string UserName);
+record OpenInput(int Number);

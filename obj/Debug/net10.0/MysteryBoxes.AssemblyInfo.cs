@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MysteryBoxes")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ede840a8c007ef5a0ad6de19ccfcaa81ac469b2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ca81b7ab1d02d047d86e63575f6e26db903ed42")]
 [assembly: System.Reflection.AssemblyProductAttribute("MysteryBoxes")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MysteryBoxes")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -31,18 +31,17 @@
 .overlay-link-row input{flex:1;min-width:220px;max-width:none;margin:0}
 .overlay-link-row button{white-space:nowrap}
 
-/* Twitch connection indicator */
-#twitchStatus{padding:12px 14px;border-radius:8px;margin:12px 0;line-height:1.65}
-.status-pending{background:#273449;color:#e5e7eb}
-.status-connected{background:#123d2b;color:#b9f6d0;border:1px solid #27945b}
-.status-disconnected{background:#3b2a12;color:#ffe0a3;border:1px solid #9a6b20}
-.status-error{background:#421d24;color:#ffd0d5;border:1px solid #a33b4b}
-.status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:currentColor;margin-right:9px;box-shadow:0 0 8px currentColor}
-#disconnectTwitchButton:disabled{opacity:.45;cursor:not-allowed}
-
 /* Toast notifications */
 .toast-container{position:fixed;top:18px;right:18px;z-index:5000;display:flex;flex-direction:column;gap:10px;pointer-events:none}
 .toast{min-width:260px;max-width:min(420px,calc(100vw - 36px));padding:13px 17px;border-radius:9px;background:#123d2b;border:1px solid #27945b;color:#d6ffe5;box-shadow:0 8px 28px #0008;font-weight:700;opacity:0;transform:translateY(-10px);transition:opacity .2s,transform .2s}
 .toast.show{opacity:1;transform:translateY(0)}
 .toast-error{background:#421d24;border-color:#a33b4b;color:#ffd0d5}
 #overlayUrl{cursor:default;user-select:all}
+
+/* Kafelki do odkrywania w panelu admina */
+.board{display:grid;gap:8px}
+.board .tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:96px;margin:0;padding:6px;font-size:30px;overflow-wrap:anywhere}
+.board .tile:hover:not(:disabled){box-shadow:0 0 16px #54ffae99}
+.board .tile:disabled{background:#0a1e16;border-color:#246b4a;cursor:default;font-size:13px}
+.board .tile img{width:40px;height:40px;object-fit:contain}
+.board .tile small{color:#9cb9aa;font-weight:normal}
