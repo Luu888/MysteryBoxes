@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MysteryBoxes.Data;
 using MysteryBoxes.Models;
 using MysteryBoxes.Services;
+using System.Windows.Forms;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,7 +105,9 @@ app.MapPost("/api/admin/upload", async (HttpRequest req, IWebHostEnvironment env
     return Results.Ok(new { url = "/uploads/" + name });
 });
 
-app.Run();
+await app.StartAsync();
+
+Application.Run(new TrayApplicationContext(app));
 
 record TitleInput(string Title);
 record SoundInput(string? SoundUrl);
