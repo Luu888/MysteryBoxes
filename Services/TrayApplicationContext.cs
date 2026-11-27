@@ -14,13 +14,30 @@ public sealed class TrayApplicationContext : ApplicationContext
 
         var menu = new ContextMenuStrip();
 
-        var infoItem = new ToolStripMenuItem("MysteryBoxes");
-        infoItem.Enabled = false;
+        // Informacja o aplikacji
+        var infoItem = new ToolStripMenuItem("MysteryBoxes")
+        {
+            Enabled = false
+        };
 
+        // Otwieranie aplikacji w przeglądarce
+        var openItem = new ToolStripMenuItem("Otwórz w przeglądarce");
+        openItem.Click += (_, _) =>
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "http://localhost:57286/",
+                UseShellExecute = true
+            });
+        };
+
+        // Zamykanie aplikacji
         var closeItem = new ToolStripMenuItem("Zamknij MysteryBoxes");
         closeItem.Click += async (_, _) => await ShutdownAsync();
 
         menu.Items.Add(infoItem);
+        menu.Items.Add(new ToolStripSeparator());
+        menu.Items.Add(openItem);
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(closeItem);
 
@@ -34,15 +51,6 @@ public sealed class TrayApplicationContext : ApplicationContext
             ContextMenuStrip = menu,
             Visible = true
         };
-
-        _notifyIcon.DoubleClick += (_, _) =>
-        {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = "http://localhost:57286",
-                UseShellExecute = true
-            });
-        };
     }
 
     private async Task ShutdownAsync()
@@ -54,12 +62,16 @@ public sealed class TrayApplicationContext : ApplicationContext
 
         _notifyIcon.Visible = false;
 
-        await _app.StopAsync();
-        await _app.DisposeAsync();
-
-        _notifyIcon.Dispose();
-
-        ExitThread();
+        try
+        {
+            await _app.StopAsync();
+            await _app.DisposeAsync();
+        }
+        finally
+        {
+            _notifyIcon.Dispose();
+            ExitThread();
+        }
     }
 
     protected override void Dispose(bool disposing)
